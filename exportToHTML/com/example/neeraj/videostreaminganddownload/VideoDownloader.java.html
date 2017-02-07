@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>VideoDownloader.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+VideoDownloader.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.neeraj.videostreaminganddownload; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.os.AsyncTask; 
+</span><span class="s0">import </span><span class="s1">android.os.Environment; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+ 
+</span><span class="s0">import </span><span class="s1">java.io.BufferedInputStream; 
+</span><span class="s0">import </span><span class="s1">java.io.File; 
+</span><span class="s0">import </span><span class="s1">java.io.FileOutputStream; 
+</span><span class="s0">import </span><span class="s1">java.io.InputStream; 
+</span><span class="s0">import </span><span class="s1">java.io.OutputStream; 
+</span><span class="s0">import </span><span class="s1">java.net.URL; 
+</span><span class="s0">import </span><span class="s1">java.net.URLConnection; 
+ 
+</span><span class="s2">/** 
+ * Created by neeraj on 2/6/2017. 
+ */</span><span class="s1"> 
+ 
+</span><span class="s0">public class </span><span class="s1">VideoDownloader </span><span class="s0">extends </span><span class="s1">AsyncTask { 
+ 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onPreExecute() { 
+        </span><span class="s0">super</span><span class="s1">.onPreExecute(); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">protected </span><span class="s1">Object doInBackground(Object[] params) { 
+        </span><span class="s0">int </span><span class="s1">count; 
+        </span><span class="s0">try</span><span class="s1">{ 
+ 
+        URL url = </span><span class="s0">new </span><span class="s1">URL(params[</span><span class="s3">0</span><span class="s1">].toString()); 
+        URLConnection conection = url.openConnection(); 
+        conection.connect(); 
+ 
+        </span><span class="s2">// this will be useful so that you can show a tipical 0-100%</span><span class="s1"> 
+        </span><span class="s2">// progress bar</span><span class="s1"> 
+        </span><span class="s0">int </span><span class="s1">lenghtOfFile = conection.getContentLength(); 
+ 
+        </span><span class="s2">// download the file</span><span class="s1"> 
+        InputStream input = </span><span class="s0">new </span><span class="s1">BufferedInputStream(url.openStream(), 
+                </span><span class="s3">8192</span><span class="s1">); 
+ 
+        </span><span class="s2">// Output stream</span><span class="s1"> 
+            String dir = Environment.getExternalStorageDirectory().toString(); 
+        OutputStream output = </span><span class="s0">new </span><span class="s1">FileOutputStream(dir 
+                + </span><span class="s4">&quot;/video.mp4&quot;</span><span class="s1">); 
+            Log.d(</span><span class="s4">&quot;directory******** &quot;</span><span class="s1">,dir); 
+ 
+        </span><span class="s0">byte </span><span class="s1">data[] = </span><span class="s0">new byte</span><span class="s1">[</span><span class="s3">1024</span><span class="s1">]; 
+ 
+        </span><span class="s0">long </span><span class="s1">total = </span><span class="s3">0</span><span class="s1">; 
+ 
+        </span><span class="s0">while </span><span class="s1">((count = input.read(data)) != -</span><span class="s3">1</span><span class="s1">) { 
+            total += count; 
+            </span><span class="s2">// publishing the progress....</span><span class="s1"> 
+            </span><span class="s2">// After this onProgressUpdate will be called</span><span class="s1"> 
+            publishProgress(</span><span class="s4">&quot;&quot; </span><span class="s1">+ (</span><span class="s0">int</span><span class="s1">) ((total * </span><span class="s3">100</span><span class="s1">) / lenghtOfFile)); 
+ 
+            </span><span class="s2">// writing data to file</span><span class="s1"> 
+            output.write(data, </span><span class="s3">0</span><span class="s1">, count); 
+        } 
+ 
+        </span><span class="s2">// flushing output</span><span class="s1"> 
+        output.flush(); 
+ 
+        </span><span class="s2">// closing streams</span><span class="s1"> 
+        output.close(); 
+        input.close(); 
+ 
+    } </span><span class="s0">catch </span><span class="s1">(Exception e) { 
+        Log.e(</span><span class="s4">&quot;Error: &quot;</span><span class="s1">, e.getMessage()); 
+    } 
+ 
+    </span><span class="s0">return null</span><span class="s1">; 
+    } 
+} 
+</span></pre>
+</body>
+</html>
